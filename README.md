@@ -22,6 +22,6 @@ Round values in numeric columns to integers
 
 Replace Yes/No with YES/NO
 
-On rows with missing values or nan, generate your own Exception, print to the console ‘Line XX contains spaces. Skipped’
+On rows with missing values or nan, generate your own Exception, print to the console ‘Line XX contains gaps. Skipped.’
 
 Write all other rows with transformed data to a new csv file
