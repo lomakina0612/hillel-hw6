@@ -4,6 +4,8 @@ import csv
 class MissingValueError(Exception):
     pass
 
+skipped_count = 0
+
 with open('student_performance_prediction.csv', mode='rt', newline='\n') as file, \
      open('new_student_performance_prediction.csv', mode='wt', newline='\n') as file_to_write:
     
@@ -22,7 +24,7 @@ with open('student_performance_prediction.csv', mode='rt', newline='\n') as file
                 raise MissingValueError(f"Line {row['Student ID']} contains gaps. Skipped")
             
             for column in numeric_columns:
-                row[column] = int(float(row[column]) + 0.5)
+                row[column] = int(float(row[column]) + 0.5) # mathematically correct rounding
             
             for column in yes_no_columns:
                 row[column] = row[column].upper()
@@ -30,5 +32,8 @@ with open('student_performance_prediction.csv', mode='rt', newline='\n') as file
             csv_writer.writerow(row)
         
         except MissingValueError as e:
+            skipped_count += 1
             print(e)
+            
+print(f"Total skipped rows: {skipped_count}")
             
