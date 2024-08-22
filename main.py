@@ -1,6 +1,9 @@
 
 import csv
 
+class MissingValueError(Exception):
+    pass
+
 with open('student_performance_prediction.csv', mode='rt', newline='\n') as file, \
      open('new_student_performance_prediction.csv', mode='wt', newline='\n') as file_to_write:
     
@@ -15,6 +18,9 @@ with open('student_performance_prediction.csv', mode='rt', newline='\n') as file
 
     for row in csv_reader:
         try:
+            if any(row[column] in ("", None) or row[column].strip().lower() == 'nan' for column in row):
+                raise MissingValueError(f"Line {row['Student ID']} contains gaps. Skipped")
+            
             for column in numeric_columns:
                 row[column] = int(float(row[column]) + 0.5)
             
@@ -23,6 +29,6 @@ with open('student_performance_prediction.csv', mode='rt', newline='\n') as file
              
             csv_writer.writerow(row)
         
-        except ValueError:
-            print(f"Line {row['Student ID']} contains gaps. Skipped")
+        except MissingValueError as e:
+            print(e)
             
